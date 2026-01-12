@@ -1,6 +1,6 @@
 package com.example.taskmanager.dto;
 
-import com.example.taskmanager.entity.Status;
+import com.example.taskmanager.entity.enumration.Status;
 import lombok.Data;
 
 @Data

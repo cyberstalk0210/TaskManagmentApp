@@ -16,10 +16,14 @@ public class GetTaskList {
 
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final CurrentUserService currentUserService;
 
     public List<TaskResponseDTO> getAll() {
-        log.info("Task pulled");
-        return taskRepository.findAll()
+        var currentUser = currentUserService.getCurrentUser();
+
+        log.info("Tasks pulled for user: {}", currentUser.getUsername());
+
+        return taskRepository.findAllByCreator(currentUser)
                 .stream()
                 .map(taskMapper::toResponseDto)
                 .toList();

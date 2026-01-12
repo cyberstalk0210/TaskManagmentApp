@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class CreateTask {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final CurrentUserService currentUserService;
 
     public TaskResponseDTO create(TaskCreateDTO dto){
         Task task = taskMapper.toEntity(dto);
+        task.setCreator(currentUserService.getCurrentUser());
         Task savedTask = taskRepository.save(task);
         log.info("Task saved");
         return taskMapper.toResponseDto(savedTask);

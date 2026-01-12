@@ -1,5 +1,7 @@
 package com.example.taskmanager.entity;
 
+import com.example.taskmanager.entity.enumration.Priority;
+import com.example.taskmanager.entity.enumration.Status;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,6 +33,10 @@ public class Task {
 
     @Column(nullable = false)
     private int progress;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User creator;
 
     public boolean isOverdue() {
         return deadline != null
