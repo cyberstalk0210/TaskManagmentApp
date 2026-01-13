@@ -950,13 +950,13 @@ const TaskManager = () => {
           );
         })}
 
-        {/* Add Column */}
+        {/* Add Column
         <div className="kanban-column add-column">
           <button className="add-column-button">
             <Plus size={20} />
             <span>Add Column</span>
           </button>
-        </div>
+        </div> */}
         </div>
       )}
 
