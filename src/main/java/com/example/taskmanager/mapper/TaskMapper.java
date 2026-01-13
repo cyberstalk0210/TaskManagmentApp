@@ -4,8 +4,8 @@ package com.example.taskmanager.mapper;
 import com.example.taskmanager.dto.TaskCreateDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.dto.TaskUpdateDTO;
-import com.example.taskmanager.entity.Priority;
-import com.example.taskmanager.entity.Status;
+import com.example.taskmanager.entity.enumration.Priority;
+import com.example.taskmanager.entity.enumration.Status;
 import com.example.taskmanager.entity.Task;
 import org.mapstruct.*;
 

@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service;
 public class UpdateTask {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final CurrentUserService currentUserService;
 
     public TaskResponseDTO update(Long id, TaskUpdateDTO dto){
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
 
+        task.setCreator(currentUserService.getCurrentUser());
         taskMapper.updateFromDto(dto, task);
         Task updatedTask = taskRepository.save(task);
 

@@ -1,7 +1,8 @@
 package com.example.taskmanager.dto;
 
-import com.example.taskmanager.entity.Priority;
-import com.example.taskmanager.entity.Status;
+import com.example.taskmanager.entity.User;
+import com.example.taskmanager.entity.enumration.Priority;
+import com.example.taskmanager.entity.enumration.Status;
 import lombok.Data;
 
 @Data
@@ -12,4 +13,5 @@ public class TaskUpdateDTO {
     private Priority priority;
     private Status status;
     private int progress;
+    private User currentUser;
 }

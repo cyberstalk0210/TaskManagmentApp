@@ -1,4 +1,4 @@
-package com.example.taskmanager.entity;
+package com.example.taskmanager.entity.enumration;
 
 public enum Status {
     BACKLOG,
