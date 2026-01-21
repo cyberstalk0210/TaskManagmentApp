@@ -25,6 +25,7 @@ apiClient.interceptors.request.use(
   }
 );
 
+
 // Response interceptor
 apiClient.interceptors.response.use(
   (response) => {
@@ -59,6 +60,11 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const notificationService = {
+  getNotifications: () => apiClient.get('http://localhost:8080/api/notification')
+};
+
 
 export const taskService = {
   getTasks: async () => {

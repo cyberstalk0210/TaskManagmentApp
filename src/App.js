@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { taskService } from './api/api';
+import { taskService,notificationService } from './api/api';
 import { 
   Plus, MoreHorizontal, Trash2, Edit2, Calendar, 
   Search, Bell, Settings, User, X, CheckCircle2,
@@ -8,6 +8,7 @@ import {
   Moon, Sun, Globe, Mail, Lock
 } from 'lucide-react';
 import './App.css';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Simple Auth Context (inline version - you can move to separate file later)
 const AuthContext = createContext(null);
@@ -173,6 +174,77 @@ const Login = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+
+const NotificationPanel = ({ onClose }) => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setLoading(true);
+        const res = await notificationService.getNotifications();
+        setNotifications(res.data || []);
+      } catch (err) {
+        console.error('Xatolik:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNotifications();
+  }, []);
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+      className="notification-dropdown"
+    >
+      <div className="notification-header">
+        <div className="flex items-center gap-2">
+          <Bell size={18} className="text-blue-500" />
+          <span>Bildirishnomalar</span>
+        </div>
+        <button onClick={onClose} className="close-btn">
+          <X size={16} />
+        </button>
+      </div>
+
+      <div className="notification-list">
+        {loading ? (
+          <div className="loading-state">
+            <div className="spinner"></div>
+            <p>Yuklanmoqda...</p>
+          </div>
+        ) : notifications.length === 0 ? (
+          <div className="empty-state">
+            <CheckCircle2 size={40} className="text-gray-300" />
+            <p>Hozircha xabarlar yo'q</p>
+          </div>
+        ) : (
+          notifications.map((n, idx) => (
+            <div key={idx} className="notification-item">
+              <div className="item-dot"></div>
+              <div className="item-content">
+                <p className="msg">{n.message}</p>
+                <div className="item-footer">
+                  <Tag size={12} />
+                  <span>Vazifa #{n.taskId}</span>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      <div className="notification-footer">
+        <button onClick={onClose}>Hammasini ko'rildi deb belgilash</button>
+      </div>
+    </motion.div>
   );
 };
 
@@ -426,12 +498,14 @@ const getTaskColor = (status) => {
 
 // Task Manager Component (your existing App content)
 const TaskManager = () => {
+  
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentView, setCurrentView] = useState('kanban'); // kanban, table, calendar
   const [searchQuery, setSearchQuery] = useState('');
+  const [showNotifications, setShowNotifications] = useState(false);
   const [filters, setFilters] = useState({
     status: null,
     priority: null,
@@ -738,8 +812,23 @@ const TaskManager = () => {
             )}
           </div>
           <div className="header-icons">
-            <Bell className="icon-button" size={24} title="Notifications" />
-            <Settings className="icon-button" size={24} onClick={() => setIsSettingsOpen(true)} title="Settings" />
+          <div style={{ position: 'relative' }}>
+          <button 
+            className={`icon-button ${showNotifications ? 'active' : ''}`} 
+            onClick={() => setShowNotifications(!showNotifications)}
+          >
+            <Bell size={24} />
+            {/* Notification borligini bildiruvchi qizil nuqta */}
+            <span className="notification-badge"></span>
+          </button>
+
+          <AnimatePresence>
+            {showNotifications && (
+              <NotificationPanel onClose={() => setShowNotifications(false)} />
+            )}
+          </AnimatePresence>
+        </div>
+              <Settings className="icon-button" size={24} onClick={() => setIsSettingsOpen(true)} title="Settings" />
             <User className="icon-button" size={24} title="Profile" />
             <LogOut className="icon-button" size={24} onClick={() => {
               localStorage.removeItem('accessToken');
