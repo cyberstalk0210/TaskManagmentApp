@@ -524,6 +524,15 @@ const TaskManager = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const handleNotificationClick = () => {
+    setShowNotifications(true);
+  
+    setTimeout(() => {
+      setShowNotifications(false);
+    }, 4000);
+  };
+  
+  
   useEffect(() => { 
     fetchTasks(); 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -788,6 +797,22 @@ const TaskManager = () => {
   return (
     <div className="app-container">
       {/* Header */}
+
+      <AnimatePresence>
+  {showNotifications && (
+    <motion.div
+      className="toast-notification"
+      initial={{ opacity: 0, x: 60 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 60 }}
+      transition={{ duration: 0.3 }}
+    >
+      <strong>Yangi bildirishnoma</strong>
+      <p>Yangi task qo‘shildi</p>
+    </motion.div>
+  )}
+</AnimatePresence>
+
       <header className="app-header">
         <div className="header-left">
           <h1 className="app-title">My Tasks</h1>
@@ -813,20 +838,18 @@ const TaskManager = () => {
           </div>
           <div className="header-icons">
           <div style={{ position: 'relative' }}>
-          <button 
-            className={`icon-button ${showNotifications ? 'active' : ''}`} 
-            onClick={() => setShowNotifications(!showNotifications)}
-          >
-            <Bell size={24} />
-            {/* Notification borligini bildiruvchi qizil nuqta */}
-            <span className="notification-badge"></span>
-          </button>
+          <button className="icon-button" onClick={handleNotificationClick}>
+  <Bell size={24} />
+  <span className="notification-badge" />
+</button>
 
-          <AnimatePresence>
-            {showNotifications && (
-              <NotificationPanel onClose={() => setShowNotifications(false)} />
-            )}
-          </AnimatePresence>
+{showNotifications && (
+  <div className="toast-notification">
+    <strong>Yangi bildirishnoma</strong>
+    <p>Yangi buyurtma qabul qilindi</p>
+  </div>
+)}
+
         </div>
               <Settings className="icon-button" size={24} onClick={() => setIsSettingsOpen(true)} title="Settings" />
             <User className="icon-button" size={24} title="Profile" />

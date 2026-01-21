@@ -21,3 +21,26 @@ code {
 #root {
   min-height: 100vh;
 }
+
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 280px;
+  background: #111827;
+  color: #fff;
+  padding: 14px 16px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  z-index: 9999;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+}
