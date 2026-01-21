@@ -31,8 +31,8 @@ public class TaskController {
         return createTask.create(dto);
     }
 
-    @PutMapping
-    public TaskResponseDTO update(@PathVariable Long id, @RequestBody TaskUpdateDTO dto) {
+    @PutMapping("{id}")
+    public TaskResponseDTO update(@PathVariable(name = "id") Long id, @RequestBody TaskUpdateDTO dto) {
         return updateTask.update(id,dto);
     }
 
